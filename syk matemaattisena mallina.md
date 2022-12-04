@@ -21,7 +21,7 @@ Kukin oppilas $i$ osallistuu $\epsilon_i=\displaystyle\sum_{j=0}^{J-1}H\left(x_{
 
 Nyt voidaan laskea jokaiselle oppilaalle $i$ ns. SYK-pisteet eli standardoitujen yhteispisteiden keskiarvo eli saadaan $\overline{z_i}=\displaystyle\sum_{j=0}^{J-1}\frac{z_{i{,}j}}{\epsilon_i}$
 
-Seuraavaksi jokaiselle kokelaalle $i$ annetaan SYK-arvosana SYK-pistespektrin mukaisesti. Järjestetään arvot $\overline{z_i}$ siten, että $\forall i\le I-1:\ \overline{z_i}\ge\overline{z_{i+1}}$
+Seuraavaksi jokaiselle kokelaalle $i$ annetaan SYK-arvosana SYK-pistespektrin mukaisesti. Järjestetään arvot $\overline{z_i}$ siten, että $\forall i < I:\ \overline{z_i}\ge\overline{z_{i+1}}$
 
 Silloin saadaan seuraava arvosanataulukko:
 
