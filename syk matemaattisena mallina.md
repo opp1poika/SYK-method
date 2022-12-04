@@ -21,18 +21,18 @@ Kukin oppilas $i$ osallistuu $\epsilon_i=\displaystyle\sum_{j=0}^{J-1}H\left(x_{
 
 Nyt voidaan laskea jokaiselle oppilaalle $i$ ns. SYK-pisteet eli standardoitujen yhteispisteiden keskiarvo eli saadaan $\overline{z_i}=\displaystyle\sum_{j=0}^{J-1}\frac{z_{i{,}j}}{\epsilon_i}$
 
-Seuraavaksi jokaiselle kokelaalle $i$ annetaan SYK-arvosana SYK-pistespektrin mukaisesti. Järjestetään arvot $\overline{z_i}$ siten, että $\forall i < I:\ \overline{z_i}\ge\overline{z_{i+1}}$
+Seuraavaksi jokaiselle kokelaalle $i$ annetaan SYK-arvosana SYK-pistespektrin mukaisesti. Järjestetään arvot $\overline{z_i}$ siten, että $\forall i < I:\ \overline{z_i}\ge\overline{z_{i-1}}$
 
 Silloin saadaan seuraava arvosanataulukko:
 
 |Väli|SYK-arvosana|
 |----|--------|
-|$0\le i<0{,}05\cdot I$|L|
-|$0{,}05\cdot I\le i<0{,}20\cdot I$|E|
-|$0{,}20\cdot I\le i<0{,}40\cdot I$|M|
+|$0\le i<0{,}05\cdot I$|i|
+|$0{,}05\cdot I\le i<0{,}20\cdot I$|A|
+|$0{,}20\cdot I\le i<0{,}40\cdot I$|B|
 |$0{,}40\cdot I\le i<0{,}60\cdot I$|C|
-|$0{,}60\cdot I\le i<0{,}80\cdot I$|B|
-|$0{,}80\cdot I\le i<0{,}95\cdot I$|A|
-|$0{,}95\cdot I\le i< I $|i|
+|$0{,}60\cdot I\le i<0{,}80\cdot I$|M|
+|$0{,}80\cdot I\le i<0{,}95\cdot I$|E|
+|$0{,}95\cdot I\le i< I $|L|
 
 Näitä SYK-arvosanoja ei anneta opiskelijoille vaan niitä käytetään määrittämään kokeessa $j$ saatu arvosana.
