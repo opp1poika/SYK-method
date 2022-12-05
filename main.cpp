@@ -95,8 +95,89 @@ char arvosanasi(int i, int j, vector<vector<int>> x, vector<vector<double>> pist
         }
     }
 }
+void kokelaan_tulokset(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat);
+void tietyn_kokelaan_tulos(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat);
+void tuloslista(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat);
+void pisterajat_n(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat);
 
-//Tässä demossa määritellään sattumanvaraiset pisteet jokaiselle kokelaalle i kokeeseen j. 
+void menu(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat){
+    string key;
+    system("CLS");
+    cout << "Hae tietyn kokelaan tulokset (1)\nPisterajat(2)\n";
+    cin >> key;
+    string tmp;
+    getline(cin, tmp);
+    if(key == "1"){
+        kokelaan_tulokset(x, arvosana, I, J, pisterajat);
+    }
+    if(key == "2"){
+        pisterajat_n(x, arvosana, I, J, pisterajat);
+    }
+    if(key != "1" && key != "2"){
+    menu(x, arvosana, I, J, pisterajat);
+    }
+}
+
+void pisterajat_n(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat){
+    system("CLS");
+    for(int j = 0; j < J; j++){
+        for(int n = 0; n < 7; n++){
+            cout << pisterajat[j][n] << " ";
+        }
+        cout << "\n";
+    }
+    system("pause");
+    menu(x, arvosana, I, J, pisterajat);
+}
+
+void kokelaan_tulokset(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat){
+    system("CLS");
+    string key;
+    cout << "Takaisin (0)\nTietyn kokelaan tulos (1)\nKaikki tulokset(2)\n";
+    cin >> key;
+    if(key == "1"){
+        tietyn_kokelaan_tulos(x, arvosana, I, J, pisterajat);
+    }
+    if(key == "2"){
+        tuloslista(x, arvosana, I, J, pisterajat);
+    }
+    if(key == "0"){
+        menu(x, arvosana, I, J, pisterajat);
+    }
+    if(key != "1" && key != "2"){
+    kokelaan_tulokset(x, arvosana, I, J, pisterajat);
+    }
+}
+
+void tuloslista(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat){
+    for(int i = 0; i < I; i++){
+        cout << "Kokelas " << i << ": ";
+        for(int j = 0; j < J; j++){
+            if(x[i][j] != -1){
+                cout << "Koe " << j << ": " << x[i][j] << "--" << arvosana[i][j] << ". ";
+            }
+        }
+        cout << "\n";
+    }
+    system("pause");
+    kokelaan_tulokset(x, arvosana, I, J, pisterajat);
+}
+
+void tietyn_kokelaan_tulos(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat){
+    system("CLS");
+    int i;
+    cout << "Kokelaan numero: ";
+    cin >> i;
+    for(int j = 0; j < x[i].size(); j++){
+        if(x[i][j] != -1){
+            cout << "Koe " << j << ". Tulos "<< x[i][j] << "--" << arvosana[i][j] << ".\n";
+        }
+    }
+    system("pause");
+    kokelaan_tulokset(x, arvosana, I, J, pisterajat);
+}
+
+//Tässä demossa määritellään sattumanvaraiset pisteet jokaiselle kokelaalle i kokeeseen j.
 //Tähän voitaisiin myös koodata input-funktio, mutta käytetään mieluummin sattumanvaraisia tuloksia, sillä oikeaa raakaa dataa ei kuitenkaan saada
 int main()
 {
@@ -107,7 +188,7 @@ int main()
     vector<double> sd;                    //Keskihajontavektori J
     vector<double> mean;                  //Keskiarvovektori J
     vector<double> z_average;             //SYK-pistevektori
-    vector<double> syk_arvosanarajat;     //Rajavektori, joka määrää syk-arosanan 
+    vector<double> syk_arvosanarajat;     //Rajavektori, joka määrää syk-arosanan
     vector<vector<double>> pisterajat;               //Kokeen j pisterajat muodossa {L, E, M, C, B, A, I}
     vector<int> syk_i_rajat;              //
     vector<double> rajat{1, 0.95, 0.8, 0.6, 0.4, 0.2, 0.05, 0};
@@ -115,46 +196,75 @@ int main()
     vector<char> syk_arvosanat;
     int I, J;
     cin >> I >> J;                        //Määritellään I (kokelaiden määrä) ja J (kokeiden määrä)
-  
-    for(int i = 0; i < I; i++){           //Iteroidaan sattumanvaraiset arvot koematriisille IxJ
-        vector<int> v1;                    
+
+    //Täytetään koematriisi arvoilla -1
+    for(int i = 0; i < I; i++){
+        vector<int> v1;
         for(int j = 0; j < J; j++){
-            v1.push_back(rand() % 121);
+            v1.push_back(-1);
         }
         x.push_back(v1);
     }
-  
-    for(int j = 0; j < J; j++){           //Määritetään keskiarvovektori sekä keskihajontavektori
+
+    //Iteroidaan sattumanvaraiset arvot koematriisille IxJ
+    for(int i = 0; i < I; i++){
+        vector<int> v1;
+        for(int j = 0; j < J; j++){
+            x[i][j] = rand() % 121;
+            if((rand() % J) > J/3){
+                x[i][j] = -1;
+            }
+        }
+        int temp = 0;
+        for(int j = 0; j < J; j++){
+                temp += x[i][j];
+        }
+        if(temp == -J){
+                x[i][rand() % J] = rand() % 121;
+        }
+    }
+
+    //Määritetään keskiarvovektori sekä keskihajontavektori
+    for(int j = 0; j < J; j++){
         mean.push_back(x_mean(j, I, x));
         sd.push_back(s(j, I, x));
     }
-    
-    for(int i = 0; i < I; i++){           //Muunnetaan koematriisi (int) IxJ --> koematriisi (double) IxJ
+
+    //Muunnetaan koematriisi (int) IxJ --> koematriisi (double) IxJ
+    for(int i = 0; i < I; i++){
         vector<double> v1(x[i].begin(), x[i].end());
         x_converted.push_back(v1);
     }
-  
-    vector<vector<double>> z = z_norm(x_converted, sd, mean, I, J);     //Normitetaan koepistematriisi IxJ
-  
-    for(int i = 0; i < I; i++){                                         //Muodostetaan SYK-pistevektori
+
+    //Normitetaan koepistematriisi IxJ
+    vector<vector<double>> z = z_norm(x_converted, sd, mean, I, J);
+
+    //Muodostetaan SYK-pistevektori
+    for(int i = 0; i < I; i++){
         z_average.push_back(z_averages(i, J, z, x));
     }
-  
-    vector<double> z_jarjestetty = z_average;           //SYK-pisterajoja varten modostetaan väliaikainen vektori, joka järjestetään SYK-pisteiden mukaan
-  
-    sort(z_jarjestetty.begin(), z_jarjestetty.end());   //Järjestetään väliaikainen vektori (pienemmästä suurimpaan)
-  
-    for(int n = 7; n >= 0; n--){                        //Määritetään kokelaat, jotka ovat arvosanojen rajapinnoilla
+
+    //SYK-pisterajoja varten modostetaan väliaikainen vektori, joka järjestetään SYK-pisteiden mukaan
+    vector<double> z_jarjestetty = z_average;
+
+    //Järjestetään väliaikainen vektori (pienemmästä suurimpaan)
+    sort(z_jarjestetty.begin(), z_jarjestetty.end());
+
+    //Määritetään kokelaat, jotka ovat arvosanojen rajapinnoilla
+    for(int n = 7; n >= 0; n--){
         syk_i_rajat.push_back(round(rajat[n] * I));
     }
-  
-    syk_arvosanarajat.push_back(z_jarjestetty[I-1]);    //Määritetään suurin SYK-pistemäärä
-  
-    for(int n = 6; n >= 0; n--){                        //Määritetään varsinaiset SYK-rajat
+
+    //Määritetään suurin SYK-pistemäärä
+    syk_arvosanarajat.push_back(z_jarjestetty[I-1]);
+
+    //Määritetään varsinaiset SYK-rajat
+    for(int n = 6; n >= 0; n--){
         syk_arvosanarajat.push_back(z_jarjestetty[syk_i_rajat[n]]);
     }
-    
-    for(int i = 0; i < I; i++){                         //Määritetään kokelaille SYK-arvosanat
+
+    //Määritetään kokelaille SYK-arvosanat
+    for(int i = 0; i < I; i++){
         for(int n = 0; n < 7; n++){
             if(z_average[i] == syk_arvosanarajat[0]){
                 syk_arvosanat.push_back(arvosanalista[0]);
@@ -166,10 +276,12 @@ int main()
             }
         }
     }
-  
-    for(int j = 0; j < J; j++){         //Määritetään pisterajat
+
+    //Määritetään pisterajat
+    for(int j = 0; j < J; j++){
         vector<double> v1;
         vector<double> v2;
+        double temp;
         vector<double> suhteelliset_kertoimet;
         for(int i = 0; i < I; i++){
             if(x[i][j] != -1){
@@ -184,36 +296,29 @@ int main()
                     amount_of_grade++;
                 }
             }
-            double temp = d(j, I, x);
+            temp = d(j, I, x);
             suhteelliset_kertoimet.push_back(amount_of_grade/temp+suhteelliset_kertoimet[n]);
         }
-        
         sort(v1.begin(), v1.end());
         for(int n = 6; n >= 0; n--){
-            v2.push_back(v1[I*suhteelliset_kertoimet[n]]);
+            v2.push_back(v1[temp*suhteelliset_kertoimet[n]]);
         }
         pisterajat.push_back(v2);
     }
-    
+
+    //Muodostetaan arvosanamatriisi
     for(int i = 0; i < I; i++){
         vector<char> v1;
-        for(int j = 0; j < J; j++){  
+        for(int j = 0; j < J; j++){
             if(x[i][j] == -1){
                 v1.push_back('-');
-                break;
+            }else{
+                v1.push_back(arvosanasi(i, j, x, pisterajat));
             }
-            v1.push_back(arvosanasi(i, j, x, pisterajat));           
         }
         arvosana.push_back(v1);
     }
-    
-    for(int i = 0; i < I; i++){
-        cout << i << " ";
-        for(int j = 0; j < J; j++){
-            cout << arvosana[i][j] << " ";
-        }
-        cout << "\n";
-    }
+    menu(x, arvosana, I, J, pisterajat);
 
     return 0;
 }
