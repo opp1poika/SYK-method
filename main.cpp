@@ -4,6 +4,7 @@
 #include <ctime>
 #include <cmath>
 #include <bits/stdc++.h>
+#include <string>
 
 using namespace std;
 
@@ -37,7 +38,7 @@ double x_mean(int j, int I, vector<vector<int>> x)
     return result/osallistujat;
 }
 
-//Kokeen j keskihajonta
+//Kokeen J keskihajonta
 double s(int j, int I, vector<vector<int>> x)
 {
     double result = 0;
@@ -86,6 +87,7 @@ double z_averages(int i, int J, vector<vector<double>> z, vector<vector<int>> x)
 }
 
 //Arvosanan määrittävä funktio
+
 char arvosanasi(int i, int j, vector<vector<int>> x, vector<vector<double>> pisterajat){
     vector<char> arvosanalista{'L', 'E', 'M', 'C', 'B', 'A', 'I'};
     for(int n = 0; n < 7; n++){
@@ -94,24 +96,15 @@ char arvosanasi(int i, int j, vector<vector<int>> x, vector<vector<double>> pist
         }
     }
 }
-
-//Kokelaan tuloksen valikko
 void kokelaan_tulokset(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat);
-
-//Tietyn kokelaan tuloksen valitseminen
 void tietyn_kokelaan_tulos(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat);
-
-//Piirtää kaikkien tulokset
 void tuloslista(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat);
+void pisterajat_n(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat);
 
-//Piirtää pisterajat
-void pisterajat_n(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat);           
-
-//Menu valikko
 void menu(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat){
     string key;
     system("CLS");
-    cout << "Hae tietyn kokelaan tulokset (1)\nPisterajat(2)\n";
+    cout << "Exit (0)\nHae tietyn kokelaan tulokset (1)\nPisterajat(2)\n";
     cin >> key;
     string tmp;
     getline(cin, tmp);
@@ -121,12 +114,14 @@ void menu(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, ve
     if(key == "2"){
         pisterajat_n(x, arvosana, I, J, pisterajat);
     }
-    if(key != "1" && key != "2"){
+    if(key == "0"){
+        exit;
+    }
+    if(key != "1" && key != "2" && key != "0"){
     menu(x, arvosana, I, J, pisterajat);
     }
 }
 
-//Pisterajat piirtävä funktio
 void pisterajat_n(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat){
     system("CLS");
     for(int j = 0; j < J; j++){
@@ -139,7 +134,6 @@ void pisterajat_n(vector<vector<int>> x, vector<vector<char>> arvosana, int I, i
     menu(x, arvosana, I, J, pisterajat);
 }
 
-//Kokelaan tulokset valikko
 void kokelaan_tulokset(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat){
     system("CLS");
     string key;
@@ -159,22 +153,32 @@ void kokelaan_tulokset(vector<vector<int>> x, vector<vector<char>> arvosana, int
     }
 }
 
-//Piirtää koko tuloslistan
 void tuloslista(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat){
+    string tulos;
     for(int i = 0; i < I; i++){
-        cout << "Kokelas " << i << ": ";
+        tulos += "Kokelas ";
+        tulos += std::to_string(i);
+        tulos += "; ";
         for(int j = 0; j < J; j++){
             if(x[i][j] != -1){
-                cout << "Koe " << j << ": " << x[i][j] << "--" << arvosana[i][j] << ". ";
+                tulos += "Koe ";
+                tulos += std::to_string(j);
+                tulos += ": ";
+                tulos += std::to_string(x[i][j]);
+                tulos += "--";
+                tulos += arvosana[i][j];
+                tulos += ". ";
             }
         }
-        cout << "\n";
+        tulos += "\n";
+
     }
+    system("CLS");
+    cout << tulos;
     system("pause");
     kokelaan_tulokset(x, arvosana, I, J, pisterajat);
 }
 
-//Valitse tietyn kokelaan tulokset
 void tietyn_kokelaan_tulos(vector<vector<int>> x, vector<vector<char>> arvosana, int I, int J, vector<vector<double>> pisterajat){
     system("CLS");
     int i;
@@ -189,9 +193,7 @@ void tietyn_kokelaan_tulos(vector<vector<int>> x, vector<vector<char>> arvosana,
     kokelaan_tulokset(x, arvosana, I, J, pisterajat);
 }
 
-//Tässä demossa määritellään sattumanvaraiset pisteet jokaiselle kokelaalle i kokeeseen j
-//Kokelaan osallistuminen kokeeseen myös arvotaan 
-//Jokainen kokelas osallistuu vähintään yhteen kokeeseen
+//Tässä demossa määritellään sattumanvaraiset pisteet jokaiselle kokelaalle i kokeeseen j.
 //Tähän voitaisiin myös koodata input-funktio, mutta käytetään mieluummin sattumanvaraisia tuloksia, sillä oikeaa raakaa dataa ei kuitenkaan saada
 int main()
 {
@@ -203,12 +205,13 @@ int main()
     vector<double> mean;                  //Keskiarvovektori J
     vector<double> z_average;             //SYK-pistevektori
     vector<double> syk_arvosanarajat;     //Rajavektori, joka määrää syk-arosanan
-    vector<vector<double>> pisterajat;    //Kokeen j pisterajat muodossa {L, E, M, C, B, A, I}
+    vector<vector<double>> pisterajat;               //Kokeen j pisterajat muodossa {L, E, M, C, B, A, I}
     vector<int> syk_i_rajat;              //
-    vector<double> rajat{1, 0.95, 0.8, 0.6, 0.4, 0.2, 0.05, 0}; //SYK-rajoja varten käytetty rajalista
-    vector<char> arvosanalista{'L', 'E', 'M', 'C', 'B', 'A', 'I'};  //YO-arvosanat
-    vector<char> syk_arvosanat;           //SYK-arvosanat
+    vector<double> rajat{1, 0.95, 0.8, 0.6, 0.4, 0.2, 0.05, 0};
+    vector<char> arvosanalista{'L', 'E', 'M', 'C', 'B', 'A', 'I'};
+    vector<char> syk_arvosanat;
     int I, J;
+    cout << "Syötä kokelaiden ja kokeiden määrä muodossa \"i [väli] j [enter]\"";
     cin >> I >> J;                        //Määritellään I (kokelaiden määrä) ja J (kokeiden määrä)
 
     //Täytetään koematriisi arvoilla -1
