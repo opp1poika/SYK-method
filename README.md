@@ -26,8 +26,6 @@ Nyt voidaan laskea jokaiselle oppilaalle $i$ ns. SYK-pisteet eli standardoitujen
 
 Seuraavaksi jokaiselle kokelaalle $i$ annetaan SYK-arvosana SYK-pistespektrin mukaisesti. Järjestetään arvot $\overline{z_i}$ siten, että $\forall i < I:\ \overline{z_i}\ge\overline{z_{i-1}}$
 
-Silloin saadaan seuraava arvosanataulukko:
-
 |Väli|SYK-arvosana|
 |----|--------|
 |$0\le i<0{,}05\cdot I$|i|
@@ -38,4 +36,20 @@ Silloin saadaan seuraava arvosanataulukko:
 |$0{,}80\cdot I\le i<0{,}95\cdot I$|E|
 |$0{,}95\cdot I\le i< I $|L|
 
-Näitä SYK-arvosanoja ei anneta opiskelijoille vaan niitä käytetään määrittämään kokeessa $j$ saatu arvosana.
+Tämän taulukon avulla saadaan määrättyä todelliset SYK-pisteiden muodostamat rajat seuraavanlaisesti
+Olkoon järjestetty SYK-pistespektri $\overline{Z_i}$.Silloin saadaan seuraava arvosanataulukko:
+
+|Väli|SYK-arvosana|
+|----|--------|
+|$\overline{Z_0}\le \overline{Z_i}<\overline{Z_{0{,}05\cdot I}}  $|i|
+|$\overline{Z_{0{,}05\cdot I}}\le \overline{Z_i}<\overline{Z_{0{,}20\cdot I}}$|A|
+|$\overline{Z_{0{,}20\cdot I}}\le \overline{Z_i}<\overline{Z_{0{,}40\cdot I}}$|B|
+|$\overline{Z_{0{,}40\cdot I}}\le \overline{Z_i}<\overline{Z_{0{,}60\cdot I}}$|C|
+|$\overline{Z_{0{,}60\cdot I}}\le \overline{Z_i}<\overline{Z_{0{,}80\cdot I}}$|M|
+|$\overline{Z_{0{,}80\cdot I}}\le \overline{Z_i}<\overline{Z_{0{,}95\cdot I}}$|E|
+|$\overline{Z_{0{,}95\cdot I}}\le \overline{Z_i}\le\overline{Z_I}$|L|
+
+Näitä SYK-arvosanoja ei todellisuudessa anneta kokelaiden tietoon vaan niitä käytetään määrittämään kokeen $j$ pisterajat.
+
+Pisterajat eli arvosanarajat määräytyy kussakin kokeessa $j$ kyseisen kokeen osallistuneiden kokelaiden $i$ muodostamasta SYK-pistespektristä.
+Kokeen $j$ arvosanaspektrin halutaan siis muistuttavan mahdollisimman paljon toisiaan.
