@@ -85,6 +85,16 @@ double z_averages(int i, int J, vector<vector<double>> z, vector<vector<int>> x)
     return result/e(i, J, x);
 }
 
+//Arvosanan määrittävä funktio
+
+char arvosanasi(int i, int j, vector<vector<int>> x, vector<vector<double>> pisterajat){
+    vector<char> arvosanalista{'L', 'E', 'M', 'C', 'B', 'A', 'I'};
+    for(int n = 0; n < 7; n++){
+        if(x[i][j] >= pisterajat[j][n]){
+            return arvosanalista[n];
+        }
+    }
+}
 
 //Tässä demossa määritellään sattumanvaraiset pisteet jokaiselle kokelaalle i kokeeseen j. 
 //Tähän voitaisiin myös koodata input-funktio, mutta käytetään mieluummin sattumanvaraisia tuloksia, sillä oikeaa raakaa dataa ei kuitenkaan saada
@@ -92,11 +102,13 @@ int main()
 {
     srand(time(0));                       //Siemen random funktiolle
     vector<vector<int>> x;                //Koematriisi IxJ (int)
+    vector<vector<char>> arvosana;        //Arvosanamatriisi IxJ
     vector<vector<double>> x_converted;   //Koematriisi IxJ (double)
     vector<double> sd;                    //Keskihajontavektori J
     vector<double> mean;                  //Keskiarvovektori J
     vector<double> z_average;             //SYK-pistevektori
     vector<double> syk_arvosanarajat;     //Rajavektori, joka määrää syk-arosanan 
+    vector<vector<double>> pisterajat;               //Kokeen j pisterajat muodossa {L, E, M, C, B, A, I}
     vector<int> syk_i_rajat;              //
     vector<double> rajat{1, 0.95, 0.8, 0.6, 0.4, 0.2, 0.05, 0};
     vector<char> arvosanalista{'L', 'E', 'M', 'C', 'B', 'A', 'I'};
@@ -155,9 +167,53 @@ int main()
         }
     }
   
-    for(int i = 0; i < I; i++){
-        cout << i << " " << z_average[i] << " " << syk_arvosanat[i] << "\n";
+    for(int j = 0; j < J; j++){         //Määritetään pisterajat
+        vector<double> v1;
+        vector<double> v2;
+        vector<double> suhteelliset_kertoimet;
+        for(int i = 0; i < I; i++){
+            if(x[i][j] != -1){
+                v1.push_back(x[i][j]);
+            }
+        }
+        suhteelliset_kertoimet.push_back(0);
+        for(int n = 0; n < 6; n++){
+            double amount_of_grade = 0;
+            for(int i = 0; i < I; i++){
+                if(x[i][j] != -1 && syk_arvosanat[i] == arvosanalista[n]){
+                    amount_of_grade++;
+                }
+            }
+            double temp = d(j, I, x);
+            suhteelliset_kertoimet.push_back(amount_of_grade/temp+suhteelliset_kertoimet[n]);
+        }
+        
+        sort(v1.begin(), v1.end());
+        for(int n = 6; n >= 0; n--){
+            v2.push_back(v1[I*suhteelliset_kertoimet[n]]);
+        }
+        pisterajat.push_back(v2);
     }
-  
+    
+    for(int i = 0; i < I; i++){
+        vector<char> v1;
+        for(int j = 0; j < J; j++){  
+            if(x[i][j] == -1){
+                v1.push_back('-');
+                break;
+            }
+            v1.push_back(arvosanasi(i, j, x, pisterajat));           
+        }
+        arvosana.push_back(v1);
+    }
+    
+    for(int i = 0; i < I; i++){
+        cout << i << " ";
+        for(int j = 0; j < J; j++){
+            cout << arvosana[i][j] << " ";
+        }
+        cout << "\n";
+    }
+
     return 0;
 }
